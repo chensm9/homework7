@@ -1,0 +1,34 @@
+
+
+body {
+  margin: auto;
+  background-color: powderblue;
+}
+
+h1 {
+  text-align: center;
+}
+
+table {
+  margin: auto;
+}
+
+td {
+  padding: 0;
+  margin: 0；
+}
+
+td:hover {
+  transition: all 0.5s;
+}
+
+button {
+  display: block;
+  margin: auto;
+  margin-top: 10px;
+  width: 140px;
+  height: 40px;
+  font-size: 16pt;
+  background-color: blue;
+  color: white;
+}
