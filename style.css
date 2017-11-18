@@ -2,7 +2,7 @@
 
 body {
   margin: auto;
-  background-color: powderblue;
+  background-color: white;
 }
 
 h1 {
@@ -11,6 +11,7 @@ h1 {
 
 table {
   margin: auto;
+  background-color: gray;
 }
 
 td {
@@ -22,6 +23,16 @@ td:hover {
   transition: all 0.5s;
 }
 
+div#time {
+  width: 80px;
+  height: 80px;
+  background-color: black;
+  color: red;
+  text-align: center;
+  font-size: 40pt;
+  border-radius: 50%;
+}
+
 button {
   display: block;
   margin: auto;
@@ -31,4 +42,8 @@ button {
   font-size: 16pt;
   background-color: blue;
   color: white;
+}
+
+.hide {
+  display: none;
 }

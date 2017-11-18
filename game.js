@@ -16,6 +16,8 @@ function Init() {
     }
     TD[15].style.backgroundImage = "none";
   }
+  timeouts = new Array();
+  nums = new Array();
 }
 
 function ChangeToNone(t1, t2) {
@@ -28,41 +30,90 @@ function ChangeToNone(t1, t2) {
   t1.style.backgroundImage = "none";
 }
 
-//判断拼图是否有解
-function Valid (nums) {
-  var sum = 0;
-  for (var i = 0; i < nums.length - 1; i++)
-    for (var j = i+1; j < nums.length; j++)
-      if (nums[i] > nums[j]) sum++;
-  return sum%2 == 0;
+function TdOnclick () {
+   var TD = document.getElementsByTagName("td");
+   for (var i = 0; i < TD.length; i++) {
+    TD[i].onclick = function() {
+      if(this.new_id != 15) {
+        var num_id = this.new_id;
+        var TD = document.getElementsByTagName("td");
+        var i = this.old_id, flag = 0;
+        if (i%4 != 0&&TD[i-1].new_id == 15) {
+          ChangeToNone(this, TD[i-1]);
+          flag = 1;
+        }
+        else if (i%4 != 3&&TD[i+1].new_id == 15) {
+          ChangeToNone(this, TD[i+1]);
+          flag = 1;
+        }
+        else if (i > 3&&TD[i-4].new_id == 15) {
+          ChangeToNone(this, TD[i-4]);
+          flag = 1;
+        }
+        else if (i < 12&&TD[i+4].new_id == 15) {
+          ChangeToNone(this, TD[i+4]);
+          flag = 1;
+        }
+        if (flag == 1)
+          for (var j = 0; j < 16; j++) {
+            if (TD[j].new_id == num_id) {
+              nums.push(j);
+              break;
+            }
+          }
+      }
+    }
+  }
+}
+
+function TdOnclick2 () {
+   var TD = document.getElementsByTagName("td");
+   for (var i = 0; i < TD.length; i++) {
+    TD[i].onclick = function() {
+      if(this.new_id != 15) {
+        var num_id = this.new_id;
+        var TD = document.getElementsByTagName("td");
+        var i = this.old_id, flag = 0;
+        if (i%4 != 0&&TD[i-1].new_id == 15) {
+          ChangeToNone(this, TD[i-1]);
+          flag = 1;
+        }
+        else if (i%4 != 3&&TD[i+1].new_id == 15) {
+          ChangeToNone(this, TD[i+1]);
+          flag = 1;
+        }
+        else if (i > 3&&TD[i-4].new_id == 15) {
+          ChangeToNone(this, TD[i-4]);
+          flag = 1;
+        }
+        else if (i < 12&&TD[i+4].new_id == 15) {
+          ChangeToNone(this, TD[i+4]);
+          flag = 1;
+        }
+        if (flag)
+          for (var j = 0; j < 16; j++) {
+            if (TD[j].new_id == num_id) {
+              nums.push(j);
+              break;
+            }
+          }
+      }
+      gameOver();
+    }
+  }
 }
 
 function ramdomSet() {
-  for (var i = 0; i < 15; i++) {
-    if ($("td")[i].new_id == 15) {
-      ChangeToNone($("td")[15], $("td")[i]);
-      break;
-    }
+  TdOnclick();
+  var TD = document.getElementsByTagName("td");
+  for (var i = 0; i < 200; i++) {
+    var num = Math.round(Math.random() * 15);
+    if (nums[nums.length-1] != num)
+      TD[num].onclick();
   }
-  while (1) {
-    for (var i = 0; i < 100; i++) {
-      var num1 = Math.round(Math.random()*14);
-      var num2 = Math.round(Math.random()*14);
-      var X = $("td")[num1].style.backgroundPositionX;
-      var Y = $("td")[num1].style.backgroundPositionY;
-      $("td")[num1].style.backgroundPositionX = $("td")[num2].style.backgroundPositionX;
-      $("td")[num1].style.backgroundPositionY = $("td")[num2].style.backgroundPositionY;
-      $("td")[num2].style.backgroundPositionX = X;
-      $("td")[num2].style.backgroundPositionY = Y;
-      var id = $("td")[num1].new_id;
-      $("td")[num1].new_id = $("td")[num2].new_id;
-      $("td")[num2].new_id = id;
-    }
-    var nums = new Array(15);
-    for (var i = 0; i < 15; i++)
-      nums[i] = $("td")[i].new_id;
-    if (Valid(nums)) break;
-  }
+  document.getElementById("reback").onclick = function () {
+    reduction(nums);
+  };
 }
 
 function gameOver() {
@@ -80,36 +131,28 @@ function gameOver() {
   }
 }
 
-function start() {
-  var TD = document.getElementsByTagName("td");
-
-  for (var i = 0; i < TD.length; i++) {
-    TD[i].onclick = function() {
-      if(this.new_id != 15) {
-        var TD = document.getElementsByTagName("td");
-        var i = this.old_id;
-        if (i%4 != 0&&TD[i-1].new_id == 15) {
-          ChangeToNone(this, TD[i-1]);
-        }
-        else if (i%4 != 3&&TD[i+1].new_id == 15) {
-          ChangeToNone(this, TD[i+1]);
-        }
-        else if (i > 3&&TD[i-4].new_id == 15) {
-          ChangeToNone(this, TD[i-4]);
-        }
-        else if (i < 12&&TD[i+4].new_id == 15) {
-          ChangeToNone(this, TD[i+4]);
-        }
-      }
-      gameOver();
-    }
+function reduction (nums) {
+  TdOnclick();
+  for (var i = nums.length-1; i >= 0; i--) {
+    timeouts.push(setTimeout("$('td')["+nums[i]+"].onclick()", (nums.length-i)*200));
   }
+  $("#reback").addClass("hide");
+}
 
+function clearTimeOuts () {
+  for (var i = 0; i < timeouts.length; i++)
+    clearTimeout(timeouts[i]);
+}
+
+function start() {
+  clearTimeOuts();
   ramdomSet();
+  $("#reback").removeClass("hide");
+  TdOnclick2();
 }
 
 window.onload = function() {
   Init();
-  $("button").click(start);
+  $("#start").click(start);
 }
 
