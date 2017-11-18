@@ -1,6 +1,6 @@
 function Init() {
   var img = new Image();
-  img.src = 'panda.jpg';
+  img.src = 'index.jpg';
   img.onload = function() {
     var TD = document.getElementsByTagName("td");
     for (var i = 0; i < TD.length; i++) {
@@ -155,4 +155,3 @@ window.onload = function() {
   Init();
   $("#start").click(start);
 }
-

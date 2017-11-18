@@ -2,7 +2,7 @@
 
 body {
   margin: auto;
-  background-color: white;
+  background: url("image.jpg");
 }
 
 h1 {
@@ -11,7 +11,7 @@ h1 {
 
 table {
   margin: auto;
-  background-color: gray;
+  background-color: lightslategray;
 }
 
 td {
